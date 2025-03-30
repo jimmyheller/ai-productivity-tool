@@ -1,27 +1,23 @@
 // pages/index.tsx
-import InputForm from '../components/InputForm';
+import Head from 'next/head';
+import InputForm from '@/components/InputForm';
 
 export default function Home() {
-    const handleInputSubmit = async (inputText: string) => {
-        try {
-            const response = await fetch('/api/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: inputText }),
-            });
-
-            if (!response.ok) throw new Error('Failed to submit');
-            alert('Submitted successfully');
-        } catch (error) {
-            console.error(error);
-            alert('Error submitting input');
-        }
-    };
-
     return (
-        <div>
-            <h1>AI Productivity Tool</h1>
-            <InputForm onSubmit={handleInputSubmit} />
-        </div>
+        <>
+            <Head>
+                <title>AI Productivity Tool</title>
+            </Head>
+            <main
+                className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center justify-center p-4">
+                <div className="w-full max-w-2xl space-y-6">
+                    <h1 className="text-4xl font-bold text-center text-slate-800">
+                        AI Productivity Tool
+                    </h1>
+                    <InputForm onSubmit={async () => {
+                    }}/>
+                </div>
+            </main>
+        </>
     );
 }
