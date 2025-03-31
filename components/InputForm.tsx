@@ -20,10 +20,7 @@ export default function InputForm({ onSubmit }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) {
-      toast({ title: 'Input required', description: 'Please enter something.' });
-      return;
-    }
+    if (!inputText.trim()) return;
 
     setLoading(true);
     setStructured(null); // reset
@@ -41,7 +38,7 @@ export default function InputForm({ onSubmit }: Props) {
         throw new Error(data.message || 'Submission failed');
       }
 
-      toast({ title: 'Submitted!', description: 'Sent to Notion ✅' });
+      toast({ title: 'AI processed', description: 'Preview your tasks before sending to Notion.' });
       if (onSubmit) onSubmit(inputText);
       setStructured(data.structured);
       setInputText('');

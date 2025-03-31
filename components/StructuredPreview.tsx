@@ -1,4 +1,7 @@
-import { Card, CardContent } from '@/components/ui/card';
+import {Card, CardContent} from '@/components/ui/card';
+import {Button} from '@/components/ui/button';
+import {useState} from 'react';
+import {useToast} from '@/hooks/use-toast';
 
 type StructuredData = {
     tasks: { title: string; priority?: string; dueDate?: string; category?: string }[];
@@ -6,7 +9,70 @@ type StructuredData = {
     ideas: string[];
 };
 
-export default function StructuredPreview({ data }: { data: StructuredData }) {
+export default function StructuredPreview({data}: { data: StructuredData }) {
+    const { toast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSendToNotion = async () => {
+        if (!data.tasks || data.tasks.length === 0) return;
+
+        setIsSubmitting(true);
+
+        try {
+            const res = await fetch('/api/push-to-notion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tasks: data.tasks }),
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to push tasks to Notion');
+            }
+
+            toast({ title: 'Success', description: 'Tasks sent to Notion' });
+        } catch (err) {
+            console.error('[Notion Sync Error]', err);
+            toast({
+                title: 'Error sending to Notion',
+                description: (err as Error).message || 'Unknown error',
+                variant: 'destructive',
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    // const handleSendToNotion = async () => {
+    //     const firstTask = data.tasks?.[0];
+    //     if (!firstTask) return;
+    //
+    //     setIsSubmitting(true);
+    //
+    //     try {
+    //         const res = await fetch('/api/push-to-notion', {
+    //             method: 'POST',
+    //             headers: {'Content-Type': 'application/json'},
+    //             body: JSON.stringify({task: firstTask}),
+    //         });
+    //
+    //         if (!res.ok) {
+    //             throw new Error('Failed to push to Notion');
+    //         }
+    //
+    //         console.log('[ Notion Sync Success]');
+    //         toast({ title: 'Success', description: 'Task sent to Notion ✅' });
+    //     } catch (err) {
+    //         console.error('[ Notion Sync Error]', err);
+    //         toast({
+    //             title: 'Error sending to Notion',
+    //             description: (err as Error).message || 'Unknown error',
+    //             variant: 'destructive',
+    //         });
+    //     } finally {
+    //         setIsSubmitting(false);
+    //     }
+    // };
+
     return (
         <Card>
             <CardContent className="p-6 space-y-4">
@@ -23,6 +89,11 @@ export default function StructuredPreview({ data }: { data: StructuredData }) {
                                 </li>
                             ))}
                         </ul>
+
+                        {/* Send to Notion button */}
+                        <Button onClick={handleSendToNotion} disabled={isSubmitting} className="mt-4">
+                            {isSubmitting ? 'Submitting...' : 'Send All Tasks to Notion'}
+                        </Button>
                     </div>
                 )}
 
