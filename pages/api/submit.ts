@@ -11,8 +11,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { text } = req.body;
+  let text: string;
+
+  try {
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    text = body.input;
+  } catch (e) {
+    console.error('[Parse Error]', e);
+    return res.status(400).json({ error: 'Invalid request body format' });
+  }
   console.log('[Input Text]', text);
+
+  if (!text || typeof text !== 'string' || text.trim() === '') {
+    return res.status(400).json({ error: 'Missing or invalid input text' });
+  }
 
   try {
     const structured = await analyzeText(text);
@@ -51,7 +63,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 });
 
 
-    res.status(200).json({ message: 'Structured task sent to Notion', task });
+    res.status(200).json({
+      message: 'Submitted successfully',
+      structured, // ← include the AI output
+    });
+
   } catch (error) {
     console.error('Error submitting to Notion:', error);
     res.status(500).json({ message: 'Internal Server Error' });
