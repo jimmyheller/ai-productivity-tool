@@ -10,8 +10,9 @@ type StructuredData = {
 };
 
 export default function StructuredPreview({data}: { data: StructuredData }) {
-    const { toast } = useToast();
+    const {toast} = useToast();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [sentTasks, setSentTasks] = useState<string[]>([]);
 
     const handleSendToNotion = async () => {
         if (!data.tasks || data.tasks.length === 0) return;
@@ -21,15 +22,16 @@ export default function StructuredPreview({data}: { data: StructuredData }) {
         try {
             const res = await fetch('/api/push-to-notion', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tasks: data.tasks }),
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({tasks: data.tasks}),
             });
 
             if (!res.ok) {
                 throw new Error('Failed to push tasks to Notion');
             }
 
-            toast({ title: 'Success', description: 'Tasks sent to Notion' });
+            setSentTasks(data.tasks.map((t) => t.title));
+            toast({title: 'Success', description: 'Tasks sent to Notion'});
         } catch (err) {
             console.error('[Notion Sync Error]', err);
             toast({
@@ -42,37 +44,6 @@ export default function StructuredPreview({data}: { data: StructuredData }) {
         }
     };
 
-    // const handleSendToNotion = async () => {
-    //     const firstTask = data.tasks?.[0];
-    //     if (!firstTask) return;
-    //
-    //     setIsSubmitting(true);
-    //
-    //     try {
-    //         const res = await fetch('/api/push-to-notion', {
-    //             method: 'POST',
-    //             headers: {'Content-Type': 'application/json'},
-    //             body: JSON.stringify({task: firstTask}),
-    //         });
-    //
-    //         if (!res.ok) {
-    //             throw new Error('Failed to push to Notion');
-    //         }
-    //
-    //         console.log('[ Notion Sync Success]');
-    //         toast({ title: 'Success', description: 'Task sent to Notion ✅' });
-    //     } catch (err) {
-    //         console.error('[ Notion Sync Error]', err);
-    //         toast({
-    //             title: 'Error sending to Notion',
-    //             description: (err as Error).message || 'Unknown error',
-    //             variant: 'destructive',
-    //         });
-    //     } finally {
-    //         setIsSubmitting(false);
-    //     }
-    // };
-
     return (
         <Card>
             <CardContent className="p-6 space-y-4">
@@ -80,19 +51,34 @@ export default function StructuredPreview({data}: { data: StructuredData }) {
                     <div>
                         <h3 className="text-lg font-semibold mb-2">🗂 Tasks</h3>
                         <ul className="list-disc pl-5 space-y-1">
-                            {data.tasks.map((task, i) => (
-                                <li key={i}>
-                                    {task.title}
-                                    {task.dueDate && (
-                                        <span className="text-sm text-muted-foreground"> (due {task.dueDate})</span>
-                                    )}
-                                </li>
-                            ))}
+                            {data.tasks.map((task, i) => {
+                                const isSent = sentTasks.includes(task.title);
+                                return (
+                                    <li key={i}
+                                        className={`flex items-center justify-between ${isSent ? 'text-muted-foreground' : ''}`}>
+                <span>
+                    {task.title}
+                    {task.dueDate && (
+                        <span className="text-sm text-muted-foreground"> (due {task.dueDate})</span>
+                    )}
+                </span>
+                                        {isSent && <span className="text-green-600 text-sm ml-2">✓ Sent</span>}
+                                    </li>
+                                );
+                            })}
                         </ul>
 
                         {/* Send to Notion button */}
-                        <Button onClick={handleSendToNotion} disabled={isSubmitting} className="mt-4">
-                            {isSubmitting ? 'Submitting...' : 'Send All Tasks to Notion'}
+                        <Button
+                            onClick={handleSendToNotion}
+                            disabled={isSubmitting || sentTasks.length === data.tasks.length}
+                            className="mt-4"
+                        >
+                            {sentTasks.length === data.tasks.length
+                                ? 'All Tasks Sent'
+                                : isSubmitting
+                                    ? 'Submitting...'
+                                    : 'Send All Tasks to Notion'}
                         </Button>
                     </div>
                 )}
