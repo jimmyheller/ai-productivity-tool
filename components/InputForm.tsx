@@ -34,7 +34,7 @@ export default function InputForm({onStructuredData}: Props) {
 
         try {
             console.log('[Voice] Requesting mic access...');
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
             console.log('[Voice] Got stream:', stream);
 
             const mediaRecorder = new MediaRecorder(stream);
@@ -50,11 +50,11 @@ export default function InputForm({onStructuredData}: Props) {
 
             mediaRecorder.onstop = async () => {
                 console.log('[Voice] Recording stopped. Preparing to send...');
-                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                const audioBlob = new Blob(audioChunksRef.current, {type: 'audio/webm'});
                 console.log('[Voice] Blob size:', audioBlob.size);
 
                 const formData = new FormData();
-                formData.append( 'audio', audioBlob, 'recording.webm');
+                formData.append('audio', audioBlob, 'recording.webm');
 
                 try {
                     const res = await fetch('/api/transcribe', {
@@ -67,13 +67,13 @@ export default function InputForm({onStructuredData}: Props) {
 
                     if (data?.text) {
                         setInput((prev) => (prev ? `${prev} ${data.text}` : data.text));
-                        toast({ title: 'Transcribed', description: data.text });
+                        toast({title: 'Transcribed', description: data.text});
                     } else {
-                        toast({ title: 'Transcription failed', variant: 'destructive' });
+                        toast({title: 'Transcription failed', variant: 'destructive'});
                     }
                 } catch (err: any) {
                     console.error('[Voice] Transcription error:', err);
-                    toast({ title: 'Transcription error', description: err.message, variant: 'destructive' });
+                    toast({title: 'Transcription error', description: err.message, variant: 'destructive'});
                 }
             };
 
@@ -82,10 +82,9 @@ export default function InputForm({onStructuredData}: Props) {
             setIsRecording(true);
         } catch (err: any) {
             console.error('[Mic error]', err);
-            toast({ title: 'Mic error', description: err.message, variant: 'destructive' });
+            toast({title: 'Mic error', description: err.message, variant: 'destructive'});
         }
     };
-
 
 
     const handleSubmit = async () => {
