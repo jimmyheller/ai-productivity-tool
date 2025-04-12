@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import StructuredPreview from './StructuredPreview';
 
 type StructuredData = {
   tasks: Array<{
@@ -24,7 +23,6 @@ interface Props {
 
 export default function InputForm({ onStructuredData }: Props) {
   const [input, setInput] = useState('');
-  const [structured, setStructured] = useState<StructuredData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // whisper
@@ -111,7 +109,6 @@ export default function InputForm({ onStructuredData }: Props) {
     if (!input.trim()) return;
 
     setIsSubmitting(true);
-    setStructured(null);
 
     try {
       const res = await fetch('/api/submit', {
@@ -124,7 +121,6 @@ export default function InputForm({ onStructuredData }: Props) {
 
       const json = await res.json();
       if (json.structured) {
-        setStructured(json.structured);
         onStructuredData(json.structured);
         toast({ title: 'Success', description: 'AI structured your input' });
       } else {
