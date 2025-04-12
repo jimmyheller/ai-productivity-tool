@@ -18,7 +18,7 @@ interface UserSettings {
 export default function Settings() {
   const { isSignedIn, isLoaded, user } = useUser();
   const [settings, setSettings] = useState<UserSettings>({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
@@ -158,10 +158,10 @@ export default function Settings() {
               <h2 className="text-lg font-semibold mb-2">How to set up your Notion integration:</h2>
               <ol className="list-decimal list-inside space-y-2 text-sm text-slate-700">
                 <li>Go to <a href="https://www.notion.so/my-integrations" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Notion integrations</a> and create a new integration</li>
-                <li>Give it a name (e.g., "AI Productivity Tool")</li>
-                <li>Copy the "Internal Integration Token" and paste it above</li>
+                <li>Give it a name (e.g., &quot;AI Productivity Tool&quot;)</li>
+                <li>Copy the &quot;Internal Integration Token&quot; and paste it above</li>
                 <li>Create a new database in Notion for your tasks</li>
-                <li>In your database, click "Share" and add your integration</li>
+                <li>In your database, click &quot;Share&quot; and add your integration</li>
                 <li>Copy the database ID from the URL and paste it above</li>
               </ol>
             </div>

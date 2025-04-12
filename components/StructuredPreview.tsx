@@ -15,7 +15,7 @@ type StructuredData = {
 
 export default function StructuredPreview({ data }: { data: StructuredData }) {
     const { toast } = useToast();
-    const { isSignedIn, user } = useUser();
+    const { isSignedIn } = useUser();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [sentTasks, setSentTasks] = useState<string[]>([]);
     const [notionError, setNotionError] = useState<string | null>(null);

@@ -72,6 +72,15 @@ export default function InputForm({ onStructuredData }: Props) {
             body: formData,
           });
 
+          if (!res.ok) {
+            throw new Error(`Transcription failed: ${res.status} ${res.statusText}`);
+          }
+          
+          const contentType = res.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new Error(`Expected JSON response but got ${contentType}`);
+          }
+
           const data = await res.json();
           console.log('[Voice] Transcription response:', data);
 
@@ -147,7 +156,6 @@ export default function InputForm({ onStructuredData }: Props) {
           </Button>
         </div>
 
-        {structured && <StructuredPreview data={structured} />}
       </CardContent>
     </Card>
   );
