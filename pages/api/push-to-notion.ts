@@ -1,12 +1,12 @@
 // pages/api/push-to-notion.ts
-
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
+import withAuth from '@/utils/withAuth';
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const databaseId = process.env.NOTION_DATABASE_ID as string;
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse, userId: string) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -18,6 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    console.log(`[Notion Tasks from ${userId}]`, tasks);
+    
     for (const task of tasks) {
       if (!task?.title) continue;
 
@@ -26,6 +28,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         properties: {
           Name: {
             title: [{ text: { content: task.title } }],
+          },
+          // Store the user ID with the task
+          UserId: {
+            rich_text: [{ text: { content: userId } }],
           },
           ...(task.dueDate && {
             'Due Date': {
@@ -47,8 +53,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     return res.status(200).json({ message: 'Tasks pushed to Notion' });
-  } catch (err: any) {
-    console.error('[Notion Push Error]', err);
-    return res.status(500).json({ error: 'Failed to push tasks to Notion' });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('[Notion Push Error]', error);
+    return res.status(500).json({ error: 'Failed to push tasks to Notion', details: errorMessage });
   }
 }
+
+export default withAuth(handler);

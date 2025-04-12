@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Productivity Tool
 
-## Getting Started
+A Next.js application that uses AI to help users organize their thoughts, tasks, and ideas.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🧠 Dump your thoughts and let AI organize them into tasks, notes, and ideas
+- 🎙️ Voice input with transcription via Whisper API
+- 🔄 Integration with Notion for task management
+- 🔐 Authentication with Clerk
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone this repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env.local` file based on `.env.local.example` and add your API keys:
+   ```
+   # Clerk Authentication (get from https://clerk.com)
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+   CLERK_SECRET_KEY=sk_test_...
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   # OpenAI API key for AI features
+   OPENAI_API_KEY=sk_...
 
-## Learn More
+   # Notion API (optional)
+   NOTION_TOKEN=secret_...
+   NOTION_DATABASE_ID=...
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Clerk Authentication Setup
 
-## Deploy on Vercel
+1. Create a Clerk account at https://clerk.com
+2. Create a new application in the Clerk dashboard
+3. Configure your authentication options (email/password, social logins, etc.)
+4. Under "API Keys", copy your Publishable Key and Secret Key
+5. Add these to your `.env.local` file
+6. Make sure to configure your redirect URLs in the Clerk dashboard:
+   - Add `http://localhost:3000/sign-in/callback` and `http://localhost:3000/sign-up/callback` for local development
+   - Add your production URLs when deploying
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Notes on Notion Integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To use the Notion integration:
+1. Create a Notion integration at https://www.notion.so/my-integrations
+2. Create a database in Notion with the required properties:
+   - Name (title)
+   - Due Date (text)
+   - Priority (text)
+   - Category (text)
+   - UserId (text)
+3. Share the database with your integration
+4. Add your Notion token and database ID to your environment variables
+
+## Technologies
+
+- Next.js with Pages Router
+- TypeScript
+- OpenAI for AI processing
+- Clerk for authentication
+- Notion API integration
+- TailwindCSS + ShadcnUI for styling

@@ -1,9 +1,9 @@
 // pages/api/submit.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { analyzeText } from '@/lib/ai';
+import withAuth from '@/utils/withAuth';
 
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse, userId: string) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -12,8 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     input = body.input;
-  } catch (e) {
-    console.error('[Parse Error]', e);
+  } catch (error) {
+    console.error('[Parse Error]', error);
     return res.status(400).json({ error: 'Invalid request body format' });
   }
 
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Missing or invalid input text' });
   }
 
-  console.log('[Input Text]', input);
+  console.log(`[Input Text from ${userId}]`, input);
 
   try {
     const structured = await analyzeText(input);
@@ -32,8 +32,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       message: 'Structured data returned',
       structured,
     });
-  } catch (err: any) {
-    console.error('[AI ERROR]', err);
-    return res.status(500).json({ error: 'Error processing input', details: err.message });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('[AI ERROR]', error);
+    return res.status(500).json({ error: 'Error processing input', details: errorMessage });
   }
 }
+
+export default withAuth(handler);

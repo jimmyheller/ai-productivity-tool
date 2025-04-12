@@ -1,3 +1,5 @@
+'use client';
+
 import {Card, CardContent} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
 import {useState} from 'react';
@@ -32,11 +34,12 @@ export default function StructuredPreview({data}: { data: StructuredData }) {
 
             setSentTasks(data.tasks.map((t) => t.title));
             toast({title: 'Success', description: 'Tasks sent to Notion'});
-        } catch (err) {
-            console.error('[Notion Sync Error]', err);
+        } catch (error: unknown) {
+            console.error('[Notion Sync Error]', error);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
             toast({
                 title: 'Error sending to Notion',
-                description: (err as Error).message || 'Unknown error',
+                description: errorMessage,
                 variant: 'destructive',
             });
         } finally {
@@ -68,7 +71,6 @@ export default function StructuredPreview({data}: { data: StructuredData }) {
                             })}
                         </ul>
 
-                        {/* Send to Notion button */}
                         <Button
                             onClick={handleSendToNotion}
                             disabled={isSubmitting || sentTasks.length === data.tasks.length}
