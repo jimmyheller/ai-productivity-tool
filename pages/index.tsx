@@ -4,10 +4,23 @@ import { useUser } from '@clerk/nextjs';
 import InputForm from '@/components/InputForm';
 import Header from '@/components/Header';
 import { Card, CardContent } from '@/components/ui/card';
+import StructuredPreview from '@/components/StructuredPreview';
+
+// Import the type definition
+type StructuredData = {
+  tasks: Array<{
+    title: string;
+    priority?: string;
+    dueDate?: string;
+    category?: string;
+  }>;
+  notes: string[];
+  ideas: string[];
+};
 
 export default function Home() {
   const { isSignedIn, isLoaded } = useUser();
-  const [, setStructuredData] = useState(null);
+  const [structuredData, setStructuredData] = useState<StructuredData | null>(null);
 
   // Wait for authentication to load
   if (!isLoaded) {
@@ -35,6 +48,7 @@ export default function Home() {
                   Dump your thoughts and let AI organize them for you.
                 </p>
                 <InputForm onStructuredData={setStructuredData} />
+                {structuredData && <StructuredPreview data={structuredData} />}
               </>
             ) : (
               <Card className="p-6">

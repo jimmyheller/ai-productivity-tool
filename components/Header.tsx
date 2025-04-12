@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useState, useCallback } from 'react';
 import { useOutsideClick } from '@/hooks/use-outside-click';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
   const { isSignedIn, user } = useUser();
@@ -34,10 +35,12 @@ export default function Header() {
                 {user.firstName || user.emailAddresses[0]?.emailAddress}
               </span>
               {user.imageUrl ? (
-                <img 
+                <Image 
                   src={user.imageUrl} 
                   alt="Profile" 
-                  className="h-8 w-8 rounded-full object-cover"
+                  width={32}
+                  height={32}
+                  className="rounded-full object-cover"
                 />
               ) : (
                 <div className="h-8 w-8 rounded-full bg-slate-300 flex items-center justify-center text-slate-700">
