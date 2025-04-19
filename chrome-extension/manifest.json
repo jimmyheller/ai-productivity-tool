@@ -3,8 +3,8 @@
   "description": "Capture and process thoughts quickly with AI.",
   "version": "1.0",
   "manifest_version": 3,
-  "permissions": ["storage", "activeTab", "scripting","sidePanel"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["storage", "sidePanel"],
+  "host_permissions": ["https://ai-productivity-tool.vercel.app/*"],
   "action": {
     "default_title": "AI Assistant",
     "default_icon": "icon.png"

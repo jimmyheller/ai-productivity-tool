@@ -1,3 +1,4 @@
+// types/formidable-serverless.d.ts
 // This is an alternative approach if the first one doesn't work
 declare module 'formidable-serverless' {
     // Import formidable for types

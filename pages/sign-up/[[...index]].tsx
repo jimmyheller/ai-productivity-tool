@@ -1,3 +1,4 @@
+// pages/sign-up/[...index].tsx
 import { SignUp } from '@clerk/nextjs';
 
 const SignUpPage = () => (

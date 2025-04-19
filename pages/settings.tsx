@@ -1,3 +1,4 @@
+//pages/settings.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
