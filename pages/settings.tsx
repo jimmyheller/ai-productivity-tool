@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Head from 'next/head';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -88,6 +89,7 @@ export default function Settings() {
               </CardHeader>
             </Card>
           </main>
+          <Footer />
         </div>
       </>
     );
@@ -168,6 +170,7 @@ export default function Settings() {
             </div>
           </div>
         </main>
+        <Footer />
       </div>
     </>
   );

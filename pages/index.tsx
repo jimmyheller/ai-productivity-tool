@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import InputForm from '@/components/InputForm';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import StructuredPreview from '@/components/StructuredPreview';
 
@@ -63,6 +64,8 @@ export default function Home() {
             )}
           </div>
         </main>
+        
+        <Footer />
       </div>
     </>
   );

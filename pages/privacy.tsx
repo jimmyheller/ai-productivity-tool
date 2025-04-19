@@ -3,6 +3,7 @@
 
 import Head from 'next/head';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function PrivacyPolicy() {
     return (
@@ -10,9 +11,9 @@ export default function PrivacyPolicy() {
             <Head>
                 <title>Privacy Policy - AI Productivity Tool</title>
             </Head>
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+            <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
                 <Header />
-                <main className="max-w-3xl mx-auto px-4 py-12">
+                <main className="flex-1 max-w-3xl mx-auto px-4 py-12">
                     <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
                     <p className="mb-4 text-sm text-gray-600">Effective Date: April 19, 2025</p>
 
@@ -69,6 +70,7 @@ export default function PrivacyPolicy() {
                         Questions or concerns? Contact us at <strong>todoproject.2025@gmail.com</strong> (update this address before launch).
                     </p>
                 </main>
+                <Footer />
             </div>
         </>
     );
