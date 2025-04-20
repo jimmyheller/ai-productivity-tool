@@ -67,7 +67,7 @@ export default function PrivacyPolicy() {
 
                     <h2 className="text-xl font-semibold mt-6 mb-2">9. Contact Us</h2>
                     <p className="mb-4">
-                        Questions or concerns? Contact us at <strong>todoproject.2025@gmail.com</strong> (update this address before launch).
+                        Questions or concerns? Contact us at <strong>todoproject.2025@gmail.com</strong>.
                     </p>
                 </main>
                 <Footer />
