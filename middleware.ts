@@ -2,12 +2,13 @@ import { clerkMiddleware } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
  
 // Define the public routes that don't require authentication
-const publicRoutes = ['/','privacy'];
+const publicRoutes = ['/', '/privacy'];
 
 // Use middleware with a custom handler function
 export default clerkMiddleware(async (auth, req) => {
   // If the request is for a public route, don't enforce authentication
-  if (publicRoutes.includes(req.nextUrl.pathname)) {
+  const pathname = req.nextUrl.pathname;
+  if (publicRoutes.includes(pathname) || pathname === '/privacy') {
     return NextResponse.next();
   }
   
