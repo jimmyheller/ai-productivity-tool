@@ -1,10 +1,11 @@
-# AI Productivity Tool
+# AI Productivity Assistant
 
-A Next.js application that uses AI to help users organize their thoughts, tasks, and ideas.
+A Next.js application that uses AI to help users chat, organize their thoughts, and manage tasks in Notion.
 
 ## Features
 
-- 🧠 Dump your thoughts and let AI organize them into tasks, notes, and ideas
+- 💬 Chat with AI to discuss ideas, problems, and plans
+- 🔍 Extract tasks from your conversation automatically
 - 🎙️ Voice input with transcription via Whisper API
 - 🔄 Integration with Notion for task management
 - 🔐 Authentication with Clerk
@@ -37,6 +38,14 @@ A Next.js application that uses AI to help users organize their thoughts, tasks,
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
+## How It Works
+
+1. Sign in to access the chat interface
+2. Chat with the AI assistant about your projects, ideas, and tasks
+3. Click "Extract Tasks" to analyze the conversation and identify tasks
+4. Review the extracted tasks in the sidebar
+5. Send tasks to your Notion database with one click
+
 ## Clerk Authentication Setup
 
 1. Create a Clerk account at https://clerk.com
@@ -65,7 +74,7 @@ To use the Notion integration:
 
 - Next.js with Pages Router
 - TypeScript
-- OpenAI for AI processing
+- OpenAI API for AI chat and task processing
 - Clerk for authentication
 - Notion API integration
 - TailwindCSS + ShadcnUI for styling
