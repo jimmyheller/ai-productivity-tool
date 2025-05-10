@@ -22,6 +22,16 @@ export default clerkMiddleware(async (auth, req) => {
     signInUrl.searchParams.set('redirect_url', req.url);
     return NextResponse.redirect(signInUrl);
   }
+
+  // Allow access to onboarding and settings pages
+  if (pathname === '/onboarding' || pathname === '/settings') {
+    return NextResponse.next();
+  }
+
+  // Allow all API routes to proceed
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
   
   // If user is signed in, allow the request to proceed
   return NextResponse.next();

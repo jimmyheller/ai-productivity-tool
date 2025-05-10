@@ -1,7 +1,8 @@
 // pages/index.tsx
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,8 +18,22 @@ type Task = {
 };
 
 export default function Home() {
-  const { isSignedIn, isLoaded } = useUser();
+  const { isSignedIn, isLoaded, user } = useUser();
   const [extractedTasks, setExtractedTasks] = useState<Task[]>([]);
+  const router = useRouter();
+
+  // Check if user needs onboarding
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      // Check if the user has completed onboarding
+      const hasCompletedOnboarding = localStorage.getItem(`onboarding_completed_${user.id}`);
+      
+      if (!hasCompletedOnboarding) {
+        // Redirect to onboarding page
+        router.push('/onboarding');
+      }
+    }
+  }, [isLoaded, isSignedIn, user, router]);
 
   // Wait for authentication to load
   if (!isLoaded) {
