@@ -55,22 +55,262 @@ async function createParaFramework(
   userId: string
 ): Promise<DatabaseIds> {
   try {
-    // First, get a valid page ID where we can create databases
-    // We'll search for pages the integration has access to
+    // Check if we have access to pages in the user's workspace
     const searchResponse = await notion.search({
+      query: '', // Empty query to get all accessible content
       filter: {
         property: 'object',
         value: 'page'
-      }
+      },
+      sort: {
+        direction: 'descending',
+        timestamp: 'last_edited_time'
+      },
+      page_size: 25 // Get enough pages to find root-level ones
     });
     
     if (searchResponse.results.length === 0) {
       throw new Error('No pages found. Please make sure the integration has access to at least one page in your Notion workspace.');
     }
     
-    // Use the first page found as parent
-    const parentPageId = searchResponse.results[0].id;
-    console.log(`Using parent page ID: ${parentPageId}`);
+    // Check if we have access to root-level pages
+    // Note: Notion API doesn't allow creating pages directly in the workspace root,
+    // but we can check if we have access to root-level pages as an indicator
+    const rootLevelPages = [];
+    const nestedPages = [];
+    
+    for (const result of searchResponse.results) {
+      // Check if it's a page with parent property
+      if ('parent' in result) {
+        if (result.parent.type === 'workspace') {
+          rootLevelPages.push(result);
+        } else {
+          nestedPages.push(result);
+        }
+      }
+    }
+    
+    // Create a new page in the user's workspace that will contain all PARA databases
+    const userName = personaData?.name || 'User';
+    let rootPageReference;
+    
+    // If we have access to root-level pages, use one as a reference
+    if (rootLevelPages.length > 0) {
+      // We can't create directly in workspace, but we'll use a root-level page
+      // This is the best we can do with the API limitations
+      rootPageReference = rootLevelPages[0].id;
+      console.log('Creating PARA framework at root level using reference page');
+    } else {
+      // We don't have access to root-level pages, inform the user
+      throw new Error('Insufficient permissions to access root-level pages. Please update the Notion integration permissions to allow access to pages in your workspace root. This will ensure your PARA framework is easily accessible and not buried within other pages.');
+    }
+    
+    // Create a dedicated page for the PARA framework with a comprehensive structure
+    const paraPage = await notion.pages.create({
+      parent: {
+        type: 'page_id',
+        page_id: rootPageReference
+      },
+      properties: {
+        title: [
+          {
+            type: 'text',
+            text: {
+              content: `${userName}'s PARA Framework`
+            }
+          }
+        ]
+      },
+      children: [
+        {
+          object: 'block',
+          type: 'heading_1',
+          heading_1: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'PARA Productivity System'
+                },
+                annotations: {
+                  bold: true,
+                  color: 'blue'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Welcome to your personalized PARA framework! PARA stands for Projects, Areas, Resources, and Archive - a simple but powerful system for organizing your digital life.'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'divider',
+          divider: {}
+        },
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'What is PARA?'
+                },
+                annotations: {
+                  bold: true
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'The PARA method organizes your digital information across four categories:'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Projects: '
+                },
+                annotations: {
+                  bold: true,
+                  color: 'green'
+                }
+              },
+              {
+                type: 'text',
+                text: {
+                  content: 'Short-term efforts with specific deadlines'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Areas: '
+                },
+                annotations: {
+                  bold: true,
+                  color: 'orange'
+                }
+              },
+              {
+                type: 'text',
+                text: {
+                  content: 'Ongoing responsibilities with no end date'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Resources: '
+                },
+                annotations: {
+                  bold: true,
+                  color: 'purple'
+                }
+              },
+              {
+                type: 'text',
+                text: {
+                  content: 'Topics or themes of ongoing interest'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Archive: '
+                },
+                annotations: {
+                  bold: true,
+                  color: 'gray'
+                }
+              },
+              {
+                type: 'text',
+                text: {
+                  content: 'Inactive items from the other categories'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'divider',
+          divider: {}
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Below you will find four databases to help you organize your tasks, responsibilities, and information. These have been personalized based on the information you provided during onboarding.'
+                }
+              }
+            ]
+          }
+        }
+      ]
+    });
+    
+    // Use the newly created page as parent for all databases
+    const parentPageId = paraPage.id;
+    console.log(`Created PARA page with ID: ${parentPageId}`);
     
     // Common database schema for all PARA databases
     const commonProperties: any = {
@@ -107,6 +347,45 @@ async function createParaFramework(
       }
     };
 
+    // First, add section headers to the page for each PARA component
+    await notion.blocks.children.append({
+      block_id: parentPageId,
+      children: [
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Projects'
+                },
+                annotations: {
+                  bold: true,
+                  color: 'green'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Short-term efforts with specific outcomes and deadlines.'
+                }
+              }
+            ]
+          }
+        }
+      ]
+    });
+    
     // Create Projects database
     const projectsDb = await notion.databases.create({
       parent: {
@@ -116,7 +395,7 @@ async function createParaFramework(
       title: [
         {
           type: 'text',
-          text: { content: 'PARA - Projects' }
+          text: { content: 'Projects' }
         }
       ],
       properties: {
@@ -126,10 +405,61 @@ async function createParaFramework(
         },
         'Project Owner': {
           rich_text: {}
+        },
+        'Goal': {
+          rich_text: {}
         }
+      },
+      icon: {
+        type: 'emoji',
+        emoji: '📋'
       }
     });
 
+    // Add Areas section header
+    await notion.blocks.children.append({
+      block_id: parentPageId,
+      children: [
+        {
+          object: 'block',
+          type: 'divider',
+          divider: {}
+        },
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Areas'
+                },
+                annotations: {
+                  bold: true,
+                  color: 'orange'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Ongoing responsibilities with no end date that require maintenance over time.'
+                }
+              }
+            ]
+          }
+        }
+      ]
+    });
+    
     // Create Areas database
     const areasDb = await notion.databases.create({
       parent: {
@@ -139,17 +469,68 @@ async function createParaFramework(
       title: [
         {
           type: 'text',
-          text: { content: 'PARA - Areas' }
+          text: { content: 'Areas' }
         }
       ],
       properties: {
         ...commonProperties,
         'Responsibility': {
           rich_text: {}
+        },
+        'Key Metrics': {
+          rich_text: {}
         }
+      },
+      icon: {
+        type: 'emoji',
+        emoji: '🔄'
       }
     });
 
+    // Add Resources section header
+    await notion.blocks.children.append({
+      block_id: parentPageId,
+      children: [
+        {
+          object: 'block',
+          type: 'divider',
+          divider: {}
+        },
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Resources'
+                },
+                annotations: {
+                  bold: true,
+                  color: 'purple'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Topics or themes of ongoing interest that you want to reference in the future.'
+                }
+              }
+            ]
+          }
+        }
+      ]
+    });
+    
     // Create Resources database
     const resourcesDb = await notion.databases.create({
       parent: {
@@ -159,7 +540,7 @@ async function createParaFramework(
       title: [
         {
           type: 'text',
-          text: { content: 'PARA - Resources' }
+          text: { content: 'Resources' }
         }
       ],
       properties: {
@@ -178,10 +559,66 @@ async function createParaFramework(
         },
         'URL': {
           url: {}
+        },
+        'Topics': {
+          multi_select: {
+            options: personaData?.interests?.map((interest: string) => ({
+              name: interest,
+              color: ['blue', 'green', 'orange', 'red', 'purple'][Math.floor(Math.random() * 5)]
+            })) || []
+          }
         }
+      },
+      icon: {
+        type: 'emoji',
+        emoji: '📖'
       }
     });
 
+    // Add Archive section header
+    await notion.blocks.children.append({
+      block_id: parentPageId,
+      children: [
+        {
+          object: 'block',
+          type: 'divider',
+          divider: {}
+        },
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Archive'
+                },
+                annotations: {
+                  bold: true,
+                  color: 'gray'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Inactive items from the other categories that you might want to reference in the future.'
+                }
+              }
+            ]
+          }
+        }
+      ]
+    });
+    
     // Create Archive database
     const archiveDb = await notion.databases.create({
       parent: {
@@ -191,7 +628,7 @@ async function createParaFramework(
       title: [
         {
           type: 'text',
-          text: { content: 'PARA - Archive' }
+          text: { content: 'Archive' }
         }
       ],
       properties: {
@@ -199,16 +636,108 @@ async function createParaFramework(
         'Original Category': {
           select: {
             options: [
-              { name: 'Project', color: 'blue' },
-              { name: 'Area', color: 'green' },
-              { name: 'Resource', color: 'orange' }
+              { name: 'Project', color: 'green' },
+              { name: 'Area', color: 'orange' },
+              { name: 'Resource', color: 'purple' }
             ]
           }
         },
         'Archived Date': {
           date: {}
+        },
+        'Reason for Archiving': {
+          rich_text: {}
         }
+      },
+      icon: {
+        type: 'emoji',
+        emoji: '🗃️'
       }
+    });
+    
+    // Add a final note with tips for using the PARA system
+    await notion.blocks.children.append({
+      block_id: parentPageId,
+      children: [
+        {
+          object: 'block',
+          type: 'divider',
+          divider: {}
+        },
+        {
+          object: 'block',
+          type: 'heading_2',
+          heading_2: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Tips for Using Your PARA Framework'
+                },
+                annotations: {
+                  bold: true
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Review your Projects weekly to track progress and update statuses'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Move completed projects to Archive when they\'re done'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Use Resources to collect information related to your interests'
+                }
+              }
+            ]
+          }
+        },
+        {
+          object: 'block',
+          type: 'bulleted_list_item',
+          bulleted_list_item: {
+            rich_text: [
+              {
+                type: 'text',
+                text: {
+                  content: 'Archive isn\'t for deletion - it\'s for items you might reference later'
+                }
+              }
+            ]
+          }
+        }
+      ]
     });
 
     // Populate with initial data based on persona if available

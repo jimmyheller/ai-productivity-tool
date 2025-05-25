@@ -1,2 +1,9 @@
 /.idea/
+.next
 node_modules
+.env.local
+.netlify
+netlify.toml
+.next/*
+.next/server/chunks/*
+/.next/
