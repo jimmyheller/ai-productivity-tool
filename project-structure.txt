@@ -3,72 +3,77 @@
 ├── LICENSE
 ├── README.md
 ├── chrome-extension
-│   ├── background.js
-│   ├── icon.png
-│   ├── manifest.json
-│   └── panel.html
-├── chrome-extension.zip
+│   ├── background.js
+│   ├── icon.png
+│   ├── manifest.json
+│   └── panel.html
 ├── components
-│   ├── ChatInterface.tsx
-│   ├── Footer.tsx
-│   ├── Header.tsx
-│   ├── InputForm.tsx
-│   ├── StructuredPreview.tsx
-│   ├── TaskPreview.tsx
-│   └── ui
-│       ├── button.tsx
-│       ├── card.tsx
-│       ├── input.tsx
-│       ├── label.tsx
-│       ├── textarea.tsx
-│       ├── toast.tsx
-│       └── toaster.tsx
+│   ├── ChatInterface.tsx
+│   ├── Footer.tsx
+│   ├── Header.tsx
+│   ├── InputForm.tsx
+│   ├── OnboardingChatInterface.tsx
+│   ├── StructuredPreview.tsx
+│   ├── TaskPreview.tsx
+│   └── ui
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       ├── textarea.tsx
+│       ├── toast.tsx
+│       └── toaster.tsx
 ├── components.json
 ├── eslint.config.mjs
 ├── hooks
-│   ├── use-outside-click.ts
-│   └── use-toast.ts
+│   ├── use-outside-click.ts
+│   └── use-toast.ts
 ├── lib
-│   ├── ai.ts
-│   ├── notion.ts
-│   └── utils.ts
+│   ├── ai.ts
+│   ├── notion.ts
+│   └── utils.ts
 ├── middleware.ts
 ├── next-env.d.ts
 ├── next.config.ts
 ├── package-lock.json
 ├── package.json
 ├── pages
-│   ├── _app.tsx
-│   ├── api
-│   │   ├── chat.ts
-│   │   ├── extract-tasks.ts
-│   │   ├── push-to-notion.ts
-│   │   ├── submit.ts
-│   │   └── transcribe.ts
-│   ├── index.tsx
-│   ├── privacy.tsx
-│   ├── settings.tsx
-│   ├── sign-in
-│   │   └── [[...index]].tsx
-│   └── sign-up
-│       └── [[...index]].tsx
+│   ├── _app.tsx
+│   ├── api
+│   │   ├── chat.ts
+│   │   ├── check-para-framework.ts
+│   │   ├── create-para-framework.ts
+│   │   ├── extract-tasks.ts
+│   │   ├── push-to-notion.ts
+│   │   ├── save-persona.ts
+│   │   ├── submit.ts
+│   │   └── transcribe.ts
+│   ├── index.tsx
+│   ├── onboarding.tsx
+│   ├── privacy.tsx
+│   ├── settings.tsx
+│   ├── sign-in
+│   │   └── [[...index]].tsx
+│   └── sign-up
+│       └── [[...index]].tsx
 ├── postcss.config.js
 ├── postcss.config.mjs
 ├── project-structure.txt
 ├── public
-│   ├── file.svg
-│   ├── globe.svg
-│   ├── next.svg
-│   ├── vercel.svg
-│   └── window.svg
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
 ├── styles
-│   ├── Home.module.css
-│   └── globals.css
+│   ├── Home.module.css
+│   └── globals.css
 ├── tailwind.config.js
 ├── tsconfig.json
 ├── types
-│   └── formidable-serverless.d.ts
+│   └── formidable-serverless.d.ts
+├── user-journey-map.html
 └── utils
     └── withAuth.ts
 
-14 directories, 58 files
+14 directories, 63 files
