@@ -417,387 +417,290 @@ export default function Settings() {
     };
 
     // If not signed in, show a message
-    if (isLoaded && !isSignedIn) {
-        return (
-            <>
-                <Head>
-                    <title>Settings - AI Productivity Tool</title>
-                </Head>
-                <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
-                    <Header/>
-                    <main className="flex-1 flex flex-col items-center p-4 pt-8">
-                        <div className="w-full max-w-lg">
-                            <h1 className="text-2xl font-bold mb-6">User Settings</h1>
 
-                            {setupNotion === 'true' && (
-                                <Card className="mb-6">
-                                    <CardHeader>
-                                        <CardTitle>Set Up Your PARA Framework</CardTitle>
-                                        <CardDescription>
-                                            Based on the information you provided, well create a personalized PARA
-                                            framework in Notion.
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-slate-700 mb-4">
-                                            PARA stands for Projects, Areas, Resources, and Archive. This framework will
-                                            help you organize your tasks and information effectively.
-                                        </p>
-                                        <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
-                                            <li><strong>Projects:</strong> Short-term efforts with a deadline</li>
-                                            <li><strong>Areas:</strong> Long-term responsibilities you want to maintain
-                                            </li>
-                                            <li><strong>Resources:</strong> Topics or themes of ongoing interest</li>
-                                            <li><strong>Archive:</strong> Inactive items from the other categories</li>
-                                        </ul>
-                                    </CardContent>
-                                </Card>
-                            )}
+    return (
+        <>
+            <Head>
+                <title>Settings - AI Productivity Tool</title>
+            </Head>
+            <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
+                <Header/>
+                <main className="flex-1 flex flex-col items-center p-4 pt-8">
+                    <div className="w-full max-w-lg">
+                        <h1 className="text-2xl font-bold mb-6">User Settings</h1>
 
-                            <Card>
+                        {setupNotion === 'true' && (
+                            <Card className="mb-6">
                                 <CardHeader>
-                                    <CardTitle>Notion Integration</CardTitle>
+                                    <CardTitle>Set Up Your PARA Framework</CardTitle>
                                     <CardDescription>
-                                        {setupNotion === 'true'
-                                            ? 'Set up your PARA framework in Notion to organize your tasks and information.'
-                                            : 'Configure your Notion API integration to manage your productivity system.'}
+                                        Based on the information you provided, well create a personalized PARA
+                                        framework in Notion.
                                     </CardDescription>
                                 </CardHeader>
-                                {/*                <CardContent className="space-y-4">*/}
-                                {/*                    {isCreatingPara ? (*/}
-                                {/*                        <div className="space-y-4">*/}
-                                {/*                            <div className="bg-blue-50 p-4 rounded-md border border-blue-100">*/}
-                                {/*                                <h3 className="font-medium text-blue-800 mb-3">Setting up your PARA*/}
-                                {/*                                    framework</h3>*/}
-
-                                {/*                                <div className="space-y-3">*/}
-                                {/*                                    <div className="flex items-center space-x-2">*/}
-                                {/*                                        <div*/}
-                                {/*                                            className="relative h-1 w-full bg-blue-100 rounded-full overflow-hidden">*/}
-                                {/*                                            <div*/}
-                                {/*                                                className="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300"*/}
-                                {/*                                                style={{width: `${progressStep * 25}%`}}*/}
-                                {/*                                            ></div>*/}
-                                {/*                                        </div>*/}
-                                {/*                                        <span*/}
-                                {/*                                            className="text-xs text-blue-800 font-medium whitespace-nowrap">{progressStep}/4</span>*/}
-                                {/*                                    </div>*/}
-
-                                {/*                                    <p className="text-sm text-blue-700">{progressStatus}</p>*/}
-
-                                {/*                                    <ul className="space-y-2">*/}
-                                {/*                                        <li className={`flex items-center text-xs ${progressStep >= 1 ? 'text-blue-700' : 'text-slate-400'}`}>*/}
-                                {/*                                            <span*/}
-                                {/*                                                className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 1 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>1</span>*/}
-                                {/*                                            Checking for existing framework*/}
-                                {/*                                        </li>*/}
-                                {/*                                        <li className={`flex items-center text-xs ${progressStep >= 2 ? 'text-blue-700' : 'text-slate-400'}`}>*/}
-                                {/*                                            <span*/}
-                                {/*                                                className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 2 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>2</span>*/}
-                                {/*                                            Analyzing workspace access*/}
-                                {/*                                        </li>*/}
-                                {/*                                        <li className={`flex items-center text-xs ${progressStep >= 3 ? 'text-blue-700' : 'text-slate-400'}`}>*/}
-                                {/*                                            <span*/}
-                                {/*                                                className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 3 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>3</span>*/}
-                                {/*                                            Creating PARA databases*/}
-                                {/*                                        </li>*/}
-                                {/*                                        <li className={`flex items-center text-xs ${progressStep >= 4 ? 'text-blue-700' : 'text-slate-400'}`}>*/}
-                                {/*                                            <span*/}
-                                {/*                                                className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 4 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>4</span>*/}
-                                {/*                                            Finalizing setup*/}
-                                {/*                                        </li>*/}
-                                {/*                                    </ul>*/}
-                                {/*                                </div>*/}
-                                {/*                            </div>*/}
-                                {/*                        </div>*/}
-                                {/*                    ) : !isEditing && settings.notionToken ? (*/}
-                                {/*                        <div className="space-y-4">*/}
-                                {/*                            <div className="flex items-center justify-between">*/}
-                                {/*                                <div>*/}
-                                {/*                                    <h3 className="font-medium">Notion Integration</h3>*/}
-                                {/*                                    <p className="text-sm text-slate-500">Your Notion integration is set*/}
-                                {/*                                        up</p>*/}
-                                {/*                                </div>*/}
-                                {/*                                <Button*/}
-                                {/*                                    variant="outline"*/}
-                                {/*                                    size="sm"*/}
-                                {/*                                    onClick={() => setIsEditing(true)}*/}
-                                {/*                                >*/}
-                                {/*                                    Edit*/}
-                                {/*                                </Button>*/}
-                                {/*                            </div>*/}
-                                {/*                            {settings.projectsDatabaseId && (*/}
-                                {/*                                <div className="bg-slate-50 p-3 rounded-md border border-slate-200">*/}
-                                {/*                                    <h4 className="text-sm font-medium mb-2">PARA Framework Databases</h4>*/}
-                                {/*                                    <ul className="text-xs text-slate-600 space-y-1">*/}
-                                {/*                                        <li>• Projects Database</li>*/}
-                                {/*                                        <li>• Areas Database</li>*/}
-                                {/*                                        <li>• Resources Database</li>*/}
-                                {/*                                        <li>• Archive Database</li>*/}
-                                {/*                                    </ul>*/}
-                                {/*                                </div>*/}
-                                {/*                            )}*/}
-                                {/*                        </div>*/}
-                                {/*                    ) : (*/}
-                                {/*                        <>*/}
-                                {/*                        <div className="space-y-4">*/}
-                                {/*                            <div className="space-y-2">*/}
-                                {/*                                <div className="flex justify-between">*/}
-                                {/*                                    <Label htmlFor="notionToken">Notion API Token</Label>*/}
-                                {/*                                    {tokenError ? (*/}
-                                {/*                                        <span className="text-xs text-red-500">{tokenError}</span>*/}
-                                {/*                                    ) : settings.notionToken ? (*/}
-                                {/*                                        <span*/}
-                                {/*                                            className="text-xs text-amber-500 font-medium">Unsaved changes</span>*/}
-                                {/*                                    ) : null}*/}
-                                {/*                                </div>*/}
-                                {/*                                <Input*/}
-                                {/*                                    id="notionToken"*/}
-                                {/*                                    name="notionToken"*/}
-                                {/*                                    type="password"*/}
-                                {/*                                    value={settings.notionToken || ''}*/}
-                                {/*                                    onChange={(e) => {*/}
-                                {/*                                        console.log('Input changed:', e.target.value);*/}
-                                {/*                                        handleChange(e);*/}
-                                {/*                                    }}*/}
-                                {/*                                    className={tokenError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}*/}
-                                {/*                                />*/}
-                                {/*                                <div className="flex justify-between text-xs">*/}
-                                {/*                                    <a*/}
-                                {/*                                        href="https://www.notion.so/my-integrations"*/}
-                                {/*                                        target="_blank"*/}
-                                {/*                                        rel="noopener noreferrer"*/}
-                                {/*                                        className="text-blue-500 hover:underline"*/}
-                                {/*                                    >*/}
-                                {/*                                        Get your Notion token*/}
-                                {/*                                    </a>*/}
-                                {/*                                    <span className="text-slate-500">Format: ntn_123...</span>*/}
-                                {/*                                </div>*/}
-
-                                {/*                                {settings.notionToken && !tokenError && (*/}
-                                {/*                                    <div*/}
-                                {/*                                        className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded-md">*/}
-                                {/*                                        <div className="flex items-center justify-between">*/}
-                                {/*                                            <p className="text-sm text-amber-800">*/}
-                                {/*                                                <strong>Important:</strong> Your token needs to be saved*/}
-                                {/*                                            </p>*/}
-                                {/*                                            <Button*/}
-                                {/*                                                size="sm"*/}
-                                {/*                                                onClick={saveSettings}*/}
-                                {/*                                                disabled={isSaving || isCreatingPara}*/}
-                                {/*                                                className="bg-amber-600 hover:bg-amber-700"*/}
-                                {/*                                            >*/}
-                                {/*                                                Save Token Now*/}
-                                {/*                                            </Button>*/}
-                                {/*                                        </div>*/}
-                                {/*                                        <h3 className="font-medium">Notion Integration</h3>*/}
-                                {/*                                        <p className="text-sm text-slate-500">Your Notion integration is set*/}
-                                {/*                                            up</p>*/}
-                                {/*                                    </div>*/}
-                                {/*                                    <Button*/}
-                                {/*                                    variant="outline"*/}
-                                {/*                                    size="sm"*/}
-                                {/*                                    onClick={() => setIsEditing(true)}*/}
-                                {/*                            >*/}
-                                {/*                                Edit*/}
-                                {/*                            </Button>*/}
-                                {/*                        </div>*/}
-                                {/*                        {settings.projectsDatabaseId && (*/}
-                                {/*                            <div className="bg-slate-50 p-3 rounded-md border border-slate-200">*/}
-                                {/*                                <h4 className="text-sm font-medium mb-2">PARA Framework Databases</h4>*/}
-                                {/*                                <ul className="text-xs text-slate-600 space-y-1">*/}
-                                {/*                                    <li>• Projects Database</li>*/}
-                                {/*                                    <li>• Areas Database</li>*/}
-                                {/*                                    <li>• Resources Database</li>*/}
-                                {/*                                    <li>• Archive Database</li>*/}
-                                {/*                                </ul>*/}
-                                {/*                            </div>*/}
-                                {/*                        )}*/}
-                                {/*                        </div>*/}
-                                {/*                        ) : (*/}
-                                {/*                        <>*/}
-                                {/*                        <div className="space-y-4">*/}
-                                {/*                        <div className="space-y-2">*/}
-                                {/*                        <div className="flex justify-between">*/}
-                                {/*                        <Label htmlFor="notionToken">Notion API Token</Label>*/}
-                                {/*                    {tokenError ? (*/}
-                                {/*                        <span className="text-xs text-red-500">{tokenError}</span>*/}
-                                {/*                ) : settings.notionToken ? (*/}
-                                {/*                <span className="text-xs text-amber-500 font-medium">Unsaved changes</span>*/}
-                                {/*                ) : null}*/}
-                                {/*        </div>*/}
-                                {/*        <Input*/}
-                                {/*            id="notionToken"*/}
-                                {/*            name="notionToken"*/}
-                                {/*            type="password"*/}
-                                {/*            value={settings.notionToken || ''}*/}
-                                {/*            onChange={(e) => {*/}
-                                {/*                console.log('Input changed:', e.target.value);*/}
-                                {/*                handleChange(e);*/}
-                                {/*            }}*/}
-                                {/*            className={tokenError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}*/}
-                                {/*        />*/}
-                                {/*        <div className="flex justify-between text-xs">*/}
-                                {/*            <a*/}
-                                {/*                href="https://www.notion.so/my-integrations"*/}
-                                {/*                target="_blank"*/}
-                                {/*                rel="noopener noreferrer"*/}
-                                {/*                className="text-blue-500 hover:underline"*/}
-                                {/*            >*/}
-                                {/*                Get your Notion token*/}
-                                {/*            </a>*/}
-                                {/*            <span className="text-slate-500">Format: ntn_123...</span>*/}
-                                {/*        </div>*/}
-
-                                {/*        {settings.notionToken && !tokenError && (*/}
-                                {/*            <div className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded-md">*/}
-                                {/*                <div className="flex items-center justify-between">*/}
-                                {/*                    <p className="text-sm text-amber-800">*/}
-                                {/*                        <strong>Important:</strong> Your token needs to be saved*/}
-                                {/*                    </p>*/}
-                                {/*                    <Button*/}
-                                {/*                        size="sm"*/}
-                                {/*                        onClick={saveSettings}*/}
-                                {/*                        disabled={isSaving || isCreatingPara}*/}
-                                {/*                        className="bg-amber-600 hover:bg-amber-700"*/}
-                                {/*                    >*/}
-                                {/*                        Save Token Now*/}
-                                {/*                    </Button>*/}
-                                {/*                </div>*/}
-                                {/*            </div>*/}
-                                {/*        )}*/}
-                                {/*</div>*/}
-
-                                {/*<div className="space-y-2 mt-4">*/}
-                                {/*    <div className="flex justify-between">*/}
-                                {/*        <Label htmlFor="notionPageId">Notion Page ID</Label>*/}
-                                {/*    </div>*/}
-                                {/*    <Input*/}
-                                {/*        id="notionPageId"*/}
-                                {/*        name="notionPageId"*/}
-                                {/*        placeholder="e.g. 2e22de6b0b6e4c0d8f84e1234567890a"*/}
-                                {/*        value={settings.notionPageId || ''}*/}
-                                {/*        onChange={handleChange}*/}
-                                {/*    />*/}
-                                {/*    <div className="flex justify-between text-xs">*/}
-                                {/*        <a*/}
-                                {/*            href="https://www.notion.so/help/add-and-manage-connections-with-the-api"*/}
-                                {/*            target="_blank"*/}
-                                {/*            rel="noopener noreferrer"*/}
-                                {/*            className="text-blue-500 hover:underline"*/}
-                                {/*        >*/}
-                                {/*            How to find page ID*/}
-                                {/*        </a>*/}
-                                {/*        <span className="text-slate-500">32-character ID from URL</span>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
-
-                                {/*<div className="mt-4 bg-blue-50 p-3 rounded-md border border-blue-100">*/}
-                                {/*    <h4 className="text-sm font-medium text-blue-800 mb-2">Setting up Notion Integration</h4>*/}
-
-                                {/*    <h5 className="text-sm font-medium text-blue-700 mt-3">1. Create and Share a Notion Page</h5>*/}
-                                {/*    <ol className="list-decimal list-inside space-y-1 text-xs text-blue-700 mt-1 ml-2">*/}
-                                {/*        <li>Create a new page in your Notion workspace</li>*/}
-                                {/*        <li>Click <strong>Share</strong> in the top right corner</li>*/}
-                                {/*        <li>Add your integration by name in the "Invite" field</li>*/}
-                                {/*        <li>Copy the page ID from the URL (32-character string)</li>*/}
-                                {/*    </ol>*/}
-
-                                {/*    <h5 className="text-sm font-medium text-blue-700 mt-3">2. Enter Required Information</h5>*/}
-                                {/*    <ol className="list-decimal list-inside space-y-1 text-xs text-blue-700 mt-1 ml-2">*/}
-                                {/*        <li>Enter your Notion API token above</li>*/}
-                                {/*        <li>Enter the page ID of the shared page</li>*/}
-                                {/*        <li>Click the <strong>"Save & Setup Notion Integration"</strong> button</li>*/}
-                                {/*    </ol>*/}
-
-                                {/*    <h5 className="text-sm font-medium text-blue-700 mt-3">3. PARA Framework Creation</h5>*/}
-                                {/*    <p className="text-xs text-blue-700 mt-1">*/}
-                                {/*        Your PARA framework will include four databases:*/}
-                                {/*    </p>*/}
-                                {/*    <ul className="list-disc list-inside space-y-1 text-xs text-blue-700 mt-1 ml-2">*/}
-                                {/*        <li><strong>Projects:</strong> Short-term efforts with deadlines</li>*/}
-                                {/*        <li><strong>Areas:</strong> Long-term responsibilities</li>*/}
-                                {/*        <li><strong>Resources:</strong> Topics of ongoing interest</li>*/}
-                                {/*        <li><strong>Archive:</strong> Inactive items</li>*/}
-                                {/*    </ul>*/}
-                                {/*</div>*/}
-                                {/*</CardContent>*/}
-                                {/*// <CardFooter>*/}
-                                {/*//     {settings.notionToken && !isEditing ? (*/}
-                                {/*//         <Button*/}
-                                {/*//             onClick={() => router.push('/')}*/}
-                                {/*//             className="w-full"*/}
-                                {/*//         >*/}
-                                {/*//             Return to Dashboard*/}
-                                {/*//         </Button>*/}
-                                {/*//     ) : (*/}
-                                {/*//         <div className="w-full flex gap-2">*/}
-                                {/*//             {isEditing && (*/}
-                                {/*//                 <Button*/}
-                                {/*//                     variant="outline"*/}
-                                {/*//                     onClick={() => {*/}
-                                {/*//                         setIsEditing(false);*/}
-                                {/*//                         // Reset to original values*/}
-                                {/*//                         const savedSettings = localStorage.getItem(`user_settings_${user?.id}`);*/}
-                                {/*//                         if (savedSettings) {*/}
-                                {/*//                             try {*/}
-                                {/*//                                 setSettings(JSON.parse(savedSettings));*/}
-                                {/*//                             } catch (e) {*/}
-                                {/*//                                 console.error('Failed to parse settings', e);*/}
-                                {/*//                             }*/}
-                                {/*//                         }*/}
-                                {/*//                     }}*/}
-                                {/*//                     className="flex-1"*/}
-                                {/*//                 >*/}
-                                {/*//                     Cancel*/}
-                                {/*//                 </Button>*/}
-                                {/*//             )}*/}
-                                {/*//             <Button*/}
-                                {/*//                 onClick={saveSettings}*/}
-                                {/*//                 disabled={isSaving || isCreatingPara}*/}
-                                {/*//                 className="flex-1"*/}
-                                {/*//             >*/}
-                                {/*//                 {isSaving ? 'Saving...' : isCreatingPara ? 'Creating PARA Framework...' : setupNotion === 'true' ? 'Create PARA Framework' : settings.notionToken ? 'Save & Setup Notion Integration' : 'Save Settings'}*/}
-                                {/*//             </Button>*/}
-                                {/*//         </div>*/}
-                                {/*//     )}*/}
-                                {/*// </CardFooter>*/}
-
+                                <CardContent>
+                                    <p className="text-sm text-slate-700 mb-4">
+                                        PARA stands for Projects, Areas, Resources, and Archive. This framework will
+                                        help you organize your tasks and information effectively.
+                                    </p>
+                                    <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
+                                        <li><strong>Projects:</strong> Short-term efforts with a deadline</li>
+                                        <li><strong>Areas:</strong> Long-term responsibilities you want to maintain
+                                        </li>
+                                        <li><strong>Resources:</strong> Topics or themes of ongoing interest</li>
+                                        <li><strong>Archive:</strong> Inactive items from the other categories</li>
+                                    </ul>
+                                </CardContent>
                             </Card>
-                            {/*<div className="mt-8">*/}
-                            {/*    <h2 className="text-lg font-semibold mb-2">How to set up your Notion integration:</h2>*/}
-                            {/*    <ol className="list-decimal list-inside space-y-2 text-sm text-slate-700">*/}
-                            {/*        <li>Go to <a href="https://www.notion.so/my-integrations" target="_blank" rel="noopener noreferrer"*/}
-                            {/*                     className="text-blue-500 hover:underline">Notion integrations</a> and create a new*/}
-                            {/*            integration*/}
-                            {/*        </li>*/}
-                            {/*        <li>Give it a name (e.g., &quot;AI Productivity Tool&quot;)</li>*/}
-                            {/*        <li>Copy the &quot;Internal Integration Token&quot; and paste it above</li>*/}
-                            {/*        {setupNotion === 'true' ? (*/}
-                            {/*            <li>Click &quot;Create PARA Framework&quot; to automatically set up your databases</li>*/}
-                            {/*        ) : (*/}
-                            {/*            <>*/}
-                            {/*                <li>Create a new database in Notion for your tasks</li>*/}
-                            {/*                <li>In your database, click &quot;Share&quot; and add your integration</li>*/}
-                            {/*                <li>Copy the database ID from the URL and paste it above</li>*/}
-                            {/*            </>*/}
-                            {/*        )}*/}
-                            {/*    </ol>*/}
-                            {/*</div>*/}
-                            {/*<li>Click &quot;Create PARA Framework&quot; to automatically set up your databases</li>*/}
-                            {/*) :*/}
-                            {/*(*/}
-                            {/*    <>*/}
-                            {/*    <li>Create a new database in Notion for your tasks</li>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                        </div>
-                    </main>
-                    <Footer/>
-                </div>
-            </>
-        );
-    }
+                        )}
 
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Notion Integration</CardTitle>
+                                <CardDescription>
+                                    {setupNotion === 'true'
+                                        ? 'Set up your PARA framework in Notion to organize your tasks and information.'
+                                        : 'Configure your Notion API integration to manage your productivity system.'}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {isCreatingPara ? (
+                                    // Creating PARA Framework State
+                                    <div className="space-y-4">
+                                        <div className="bg-blue-50 p-4 rounded-md border border-blue-100">
+                                            <h3 className="font-medium text-blue-800 mb-3">Setting up your PARA
+                                                framework</h3>
+                                            <div className="space-y-3">
+                                                <div className="flex items-center space-x-2">
+                                                    <div
+                                                        className="relative h-1 w-full bg-blue-100 rounded-full overflow-hidden">
+                                                        <div
+                                                            className="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300"
+                                                            style={{width: `${progressStep * 25}%`}}
+                                                        ></div>
+                                                    </div>
+                                                    <span
+                                                        className="text-xs text-blue-800 font-medium whitespace-nowrap">{progressStep}/4</span>
+                                                </div>
+                                                <p className="text-sm text-blue-700">{progressStatus}</p>
+                                                <ul className="space-y-2">
+                                                    <li className={`flex items-center text-xs ${progressStep >= 1 ? 'text-blue-700' : 'text-slate-400'}`}>
+                                                        <span
+                                                            className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 1 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>1</span>
+                                                        Checking for existing framework
+                                                    </li>
+                                                    <li className={`flex items-center text-xs ${progressStep >= 2 ? 'text-blue-700' : 'text-slate-400'}`}>
+                                                        <span
+                                                            className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 2 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>2</span>
+                                                        Analyzing workspace access
+                                                    </li>
+                                                    <li className={`flex items-center text-xs ${progressStep >= 3 ? 'text-blue-700' : 'text-slate-400'}`}>
+                                                        <span
+                                                            className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 3 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>3</span>
+                                                        Creating PARA databases
+                                                    </li>
+                                                    <li className={`flex items-center text-xs ${progressStep >= 4 ? 'text-blue-700' : 'text-slate-400'}`}>
+                                                        <span
+                                                            className={`inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full ${progressStep >= 4 ? 'bg-blue-500 text-white' : 'bg-slate-200'}`}>4</span>
+                                                        Finalizing setup
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : !isEditing && settings.notionToken ? (
+                                    // Already Set Up State
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <h3 className="font-medium">Notion Integration</h3>
+                                                <p className="text-sm text-slate-500">Your Notion integration is set
+                                                    up</p>
+                                            </div>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setIsEditing(true)}
+                                            >
+                                                Edit
+                                            </Button>
+                                        </div>
+                                        {settings.projectsDatabaseId && (
+                                            <div className="bg-slate-50 p-3 rounded-md border border-slate-200">
+                                                <h4 className="text-sm font-medium mb-2">PARA Framework Databases</h4>
+                                                <ul className="text-xs text-slate-600 space-y-1">
+                                                    <li>• Projects Database</li>
+                                                    <li>• Areas Database</li>
+                                                    <li>• Resources Database</li>
+                                                    <li>• Archive Database</li>
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    // Setup/Edit State
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between">
+                                                <Label htmlFor="notionToken">Notion API Token</Label>
+                                                {tokenError ? (
+                                                    <span className="text-xs text-red-500">{tokenError}</span>
+                                                ) : settings.notionToken ? (
+                                                    <span
+                                                        className="text-xs text-amber-500 font-medium">Unsaved changes</span>
+                                                ) : null}
+                                            </div>
+                                            <Input
+                                                id="notionToken"
+                                                name="notionToken"
+                                                type="password"
+                                                value={settings.notionToken || ''}
+                                                onChange={(e) => {
+                                                    console.log('Input changed:', e.target.value);
+                                                    handleChange(e);
+                                                }}
+                                                className={tokenError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}
+                                            />
+                                            <div className="flex justify-between text-xs">
+                                                <a
+                                                    href="https://www.notion.so/my-integrations"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-500 hover:underline"
+                                                >
+                                                    Get your Notion token
+                                                </a>
+                                                <span className="text-slate-500">Format: ntn_123...</span>
+                                            </div>
 
-}
+                                            {settings.notionToken && !tokenError && (
+                                                <div
+                                                    className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded-md">
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="text-sm text-amber-800">
+                                                            <strong>Important:</strong> Your token needs to be saved
+                                                        </p>
+                                                        <Button
+                                                            size="sm"
+                                                            onClick={saveSettings}
+                                                            disabled={isSaving || isCreatingPara}
+                                                            className="bg-amber-600 hover:bg-amber-700"
+                                                        >
+                                                            Save Token Now
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-2 mt-4">
+                                            <div className="flex justify-between">
+                                                <Label htmlFor="notionPageId">Notion Page ID</Label>
+                                            </div>
+                                            <Input
+                                                id="notionPageId"
+                                                name="notionPageId"
+                                                placeholder="e.g. 2e22de6b0b6e4c0d8f84e1234567890a"
+                                                value={settings.notionPageId || ''}
+                                                onChange={handleChange}
+                                            />
+                                            <div className="flex justify-between text-xs">
+                                                <a
+                                                    href="https://www.notion.so/help/add-and-manage-connections-with-the-api"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-500 hover:underline"
+                                                >
+                                                    How to find page ID
+                                                </a>
+                                                <span className="text-slate-500">32-character ID from URL</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-4 bg-blue-50 p-3 rounded-md border border-blue-100">
+                                            <h4 className="text-sm font-medium text-blue-800 mb-2">Setting up Notion
+                                                Integration</h4>
+
+                                            <h5 className="text-sm font-medium text-blue-700 mt-3">1. Create and Share a
+                                                Notion Page</h5>
+                                            <ol className="list-decimal list-inside space-y-1 text-xs text-blue-700 mt-1 ml-2">
+                                                <li>Create a new page in your Notion workspace</li>
+                                                <li>Click <strong>Share</strong> in the top right corner</li>
+                                                <li>Add your integration by name in the Invite field</li>
+                                                <li>Copy the page ID from the URL (32-character string)</li>
+                                            </ol>
+
+                                            <h5 className="text-sm font-medium text-blue-700 mt-3">2. Enter Required
+                                                Information</h5>
+                                            <ol className="list-decimal list-inside space-y-1 text-xs text-blue-700 mt-1 ml-2">
+                                                <li>Enter your Notion API token above</li>
+                                                <li>Enter the page ID of the shared page</li>
+                                                <li>Click the <strong>Save & Setup Notion Integration</strong> button
+                                                </li>
+                                            </ol>
+
+                                            <h5 className="text-sm font-medium text-blue-700 mt-3">3. PARA Framework
+                                                Creation</h5>
+                                            <p className="text-xs text-blue-700 mt-1">
+                                                Your PARA framework will include four databases:
+                                            </p>
+                                            <ul className="list-disc list-inside space-y-1 text-xs text-blue-700 mt-1 ml-2">
+                                                <li><strong>Projects:</strong> Short-term efforts with deadlines</li>
+                                                <li><strong>Areas:</strong> Long-term responsibilities</li>
+                                                <li><strong>Resources:</strong> Topics of ongoing interest</li>
+                                                <li><strong>Archive:</strong> Inactive items</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
+                            </CardContent>
+                            <CardFooter>
+                                {settings.notionToken && !isEditing ? (
+                                    <Button
+                                        onClick={() => router.push('/')}
+                                        className="w-full"
+                                    >
+                                        Return to Dashboard
+                                    </Button>
+                                ) : (
+                                    <div className="w-full flex gap-2">
+                                        {isEditing && (
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => {
+                                                    setIsEditing(false);
+                                                    // Reset to original values
+                                                    const savedSettings = localStorage.getItem(`user_settings_${user?.id}`);
+                                                    if (savedSettings) {
+                                                        try {
+                                                            setSettings(JSON.parse(savedSettings));
+                                                        } catch (e) {
+                                                            console.error('Failed to parse settings', e);
+                                                        }
+                                                    }
+                                                }}
+                                                className="flex-1"
+                                            >
+                                                Cancel
+                                            </Button>
+                                        )}
+                                        <Button
+                                            onClick={saveSettings}
+                                            disabled={isSaving || isCreatingPara}
+                                            className="flex-1"
+                                        >
+                                            {isSaving ? 'Saving...' : isCreatingPara ? 'Creating PARA Framework...' : setupNotion === 'true' ? 'Create PARA Framework' : settings.notionToken ? 'Save & Setup Notion Integration' : 'Save Settings'}
+                                        </Button>
+                                    </div>
+                                )}
+                            </CardFooter>
+
+                        </Card>
+                    </div>
+
+                </main>
+                <Footer/>
+            </div>
+        </>
+    )
+};
