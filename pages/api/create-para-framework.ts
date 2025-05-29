@@ -3,6 +3,17 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
 import { getPersonaData } from './save-persona';
 
+type PersonaData = {
+  name?: string;
+  age?: string;
+  occupation?: string;
+  interests?: string[];
+  currentProjects?: string[];
+  workStyle?: string;
+  preferences?: Record<string, string>;
+  additionalInfo?: string;
+};
+
 type DatabaseIds = {
   projects: string;
   areas: string;
@@ -51,7 +62,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 async function createParaFramework(
   notion: Client,
-  personaData: any,
+  personaData: PersonaData | null,
   userId: string
 ): Promise<DatabaseIds> {
   try {
@@ -313,7 +324,7 @@ async function createParaFramework(
     console.log(`Created PARA page with ID: ${parentPageId}`);
     
     // Common database schema for all PARA databases
-    const commonProperties: any = {
+    const commonProperties: Record<string, unknown> = {
       Name: {
         title: {}
       },
@@ -564,7 +575,7 @@ async function createParaFramework(
           multi_select: {
             options: personaData?.interests?.map((interest: string) => ({
               name: interest,
-              color: ['blue', 'green', 'orange', 'red', 'purple'][Math.floor(Math.random() * 5)]
+              color: (['blue', 'green', 'orange', 'red', 'purple'] as const)[Math.floor(Math.random() * 5)]
             })) || []
           }
         }
@@ -765,7 +776,7 @@ async function createParaFramework(
 async function populateInitialData(
   notion: Client,
   databaseIds: DatabaseIds,
-  personaData: any,
+  personaData: PersonaData,
   userId: string
 ) {
   // Add current projects from persona data to Projects database

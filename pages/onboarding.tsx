@@ -20,7 +20,7 @@ function OnboardingPage() {
   const router = useRouter();
   const { user } = useUser();
   const { toast } = useToast();
-  const [personaData, setPersonaData] = useState<PersonaData | null>(null);
+  const [, setPersonaData] = useState<PersonaData | null>(null);
   const [isComplete, setIsComplete] = useState(false);
 
   // Handle the completion of onboarding chat
@@ -80,7 +80,7 @@ function OnboardingPage() {
       
       <Card className="mb-6">
         <CardContent className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Let's Get to Know You</h2>
+          <h2 className="text-xl font-semibold mb-4">Let&apos;s Get to Know You</h2>
           <p className="mb-4">
             To provide you with the best experience, our AI assistant would like to learn about you.
             This information will help us create a personalized PARA framework in Notion for your
@@ -99,7 +99,7 @@ function OnboardingPage() {
           <CardContent className="p-6">
             <h2 className="text-xl font-semibold mb-4">Thank You!</h2>
             <p className="mb-4">
-              We've collected all the information we need. You'll be redirected to the settings
+              We&apos;ve collected all the information we need. You&apos;ll be redirected to the settings
               page to set up your Notion integration.
             </p>
             <Button

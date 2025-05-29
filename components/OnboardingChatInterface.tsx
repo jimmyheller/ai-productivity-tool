@@ -119,7 +119,7 @@ export default function OnboardingChatInterface({ onComplete }: Props) {
 
   const processUserResponse = (response: string, field: string) => {
     // Process and store the user's response based on the field
-    let processedValue: any = response;
+    let processedValue: string | string[] = response;
 
     // For fields that should be arrays, split the response
     if (field === 'interests' || field === 'currentProjects') {

@@ -1,6 +1,5 @@
 // pages/api/save-persona.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getAuth } from '@clerk/nextjs/server';
 
 type PersonaData = {
   name: string;

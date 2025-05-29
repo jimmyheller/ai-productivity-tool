@@ -26,7 +26,7 @@ type TaskData = {
 };
 
 type ChatMessage = {
-  role: string;
+  role: 'user' | 'assistant' | 'system';
   content: string;
 };
 
