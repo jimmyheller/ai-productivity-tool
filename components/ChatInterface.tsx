@@ -154,9 +154,11 @@ export default function ChatInterface({ onExtractedTasks }: Props) {
     }
   };
 
-  if (error) {
-    toast({ title: 'Error', description: error.message, variant: 'destructive' });
-  }
+  useEffect(() => {
+    if (error) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  }, [error, toast]);
 
   return (
     <Card className="p-4 flex flex-col h-[600px] w-full">
