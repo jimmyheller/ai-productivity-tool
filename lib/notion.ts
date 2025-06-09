@@ -28,68 +28,122 @@ export function getUserNotionConfig(userId: string): UserNotionConfig | null {
   return null;
 }
 
-export function getNotionClient(userId: string): Client | null {
-  const config = getUserNotionConfig(userId);
-  
-  if (!config) {
-    return null;
-  }
-  
-  return new Client({ auth: config.notionToken });
-}
 
-export async function createNotionTasks(
-  userId: string,
-  tasks: Array<{
+
+/**
+ * Creates PARA framework elements in Notion with provided configuration
+ * 
+ * Note: Your Notion database should have these properties for best results:
+ * - Name (Title) - Required
+ * - Type (Text) - For PARA category (PROJECT, AREA, RESOURCE, ARCHIVE)
+ * - Description (Text) - For element description
+ * - Priority (Text) - For priority level
+ * - Due Date (Text) - For deadlines
+ * - Tags (Text) - For comma-separated tags
+ * - Context (Text) - For conversation context
+ */
+export async function createNotionParaElementsWithConfig(
+  paraElements: Array<{
+    id: string;
     title: string;
-    priority?: string;
+    description?: string;
+    type: 'project' | 'area' | 'resource' | 'archive';
+    priority?: 'low' | 'medium' | 'high';
     dueDate?: string;
-    category?: string;
-  }>
-) {
-  const client = getNotionClient(userId);
-  const config = getUserNotionConfig(userId);
-  
-  if (!client || !config) {
-    throw new Error('Notion client not configured. Please update your Notion settings.');
+    tags?: string[];
+    context?: string;
+  }>,
+  notionConfig: {
+    notionToken: string;
+    notionDatabaseId: string;
   }
-
-  const databaseId = config.notionDatabaseId;
+) {
+  const client = new Client({ auth: notionConfig.notionToken });
+  const databaseId = notionConfig.notionDatabaseId;
   
   const results = [];
   
-  for (const task of tasks) {
-    if (!task?.title) continue;
+  for (const element of paraElements) {
+    if (!element?.title) continue;
 
-    const result = await client.pages.create({
-      parent: { database_id: databaseId },
-      properties: {
-        Name: {
-          title: [{ text: { content: task.title } }],
-        },
-        // Store the user ID with the task
-        UserId: {
-          rich_text: [{ text: { content: userId } }],
-        },
-        ...(task.dueDate && {
-          'Due Date': {
-            rich_text: [{ text: { content: task.dueDate } }],
-          },
-        }),
-        ...(task.priority && {
-          Priority: {
-            rich_text: [{ text: { content: task.priority } }],
-          },
-        }),
-        ...(task.category && {
-          Category: {
-            rich_text: [{ text: { content: task.category } }],
-          },
-        }),
+    // First, try to get database properties to understand the schema
+    let databaseProperties: Record<string, { type: string; [key: string]: unknown }> = {};
+    try {
+      const database = await client.databases.retrieve({ database_id: databaseId });
+      databaseProperties = database.properties || {};
+    } catch {
+      console.warn('[Notion] Could not retrieve database schema, using fallback approach');
+    }
+
+    // Build properties object based on what exists in the database
+    const properties: Record<string, unknown> = {
+      // Name/Title is required and should always exist
+      Name: {
+        title: [{ text: { content: element.title } }],
       },
-    });
-    
-    results.push(result);
+    };
+
+    // Add optional properties only if they exist in the database
+    if (element.type && databaseProperties.Type) {
+      if (databaseProperties.Type.type === 'select') {
+        properties.Type = { select: { name: element.type.toUpperCase() } };
+      } else {
+        properties.Type = { rich_text: [{ text: { content: element.type.toUpperCase() } }] };
+      }
+    }
+
+    if (element.description && databaseProperties.Description) {
+      properties.Description = { rich_text: [{ text: { content: element.description } }] };
+    }
+
+    if (element.dueDate && databaseProperties['Due Date']) {
+      if (databaseProperties['Due Date'].type === 'date') {
+        properties['Due Date'] = { date: { start: element.dueDate } };
+      } else {
+        properties['Due Date'] = { rich_text: [{ text: { content: element.dueDate } }] };
+      }
+    }
+
+    if (element.priority && databaseProperties.Priority) {
+      if (databaseProperties.Priority.type === 'select') {
+        properties.Priority = { select: { name: element.priority } };
+      } else {
+        properties.Priority = { rich_text: [{ text: { content: element.priority } }] };
+      }
+    }
+
+    if (element.tags && element.tags.length > 0 && databaseProperties.Tags) {
+      if (databaseProperties.Tags.type === 'multi_select') {
+        properties.Tags = { multi_select: element.tags.map(tag => ({ name: tag })) };
+      } else {
+        properties.Tags = { rich_text: [{ text: { content: element.tags.join(', ') } }] };
+      }
+    }
+
+    if (element.context && databaseProperties.Context) {
+      properties.Context = { rich_text: [{ text: { content: element.context } }] };
+    }
+
+    // Add a fallback description in the Name if no Description property exists
+    if (element.description && !databaseProperties.Description) {
+      properties.Name = {
+        title: [{ text: { content: `${element.title} - ${element.description}` } }],
+      };
+    }
+
+    try {
+      const result = await client.pages.create({
+        parent: { database_id: databaseId },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        properties: properties as Record<string, any>,
+      });
+      
+      results.push(result);
+    } catch (error) {
+      console.error(`[Notion] Failed to create page for element "${element.title}":`, error);
+      // Continue with other elements even if one fails
+      throw new Error(`Failed to create Notion page for "${element.title}": ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
   
   return results;

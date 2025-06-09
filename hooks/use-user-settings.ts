@@ -49,9 +49,14 @@ export function useUserSettings() {
 
     setIsSaving(true);
     try {
-      // Remove notionDatabaseId from settings as we're using PARA framework instead
+      // Keep notionDatabaseId for PARA elements - only remove if we have PARA-specific database IDs
       const updatedSettings = { ...settings };
-      delete updatedSettings.notionDatabaseId;
+      
+      // Only remove notionDatabaseId if we have PARA-specific databases configured
+      if (settings.projectsDatabaseId && settings.areasDatabaseId && 
+          settings.resourcesDatabaseId && settings.archiveDatabaseId) {
+        delete updatedSettings.notionDatabaseId;
+      }
 
       // Save the current settings
       const settingsToSave = JSON.stringify(updatedSettings);

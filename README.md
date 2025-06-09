@@ -5,9 +5,11 @@ A Next.js application that uses AI to help users chat, organize their thoughts, 
 ## Features
 
 - 💬 Chat with AI to discuss ideas, problems, and plans
-- 🔍 Extract tasks from your conversation automatically
+- 🎯 **Real-time PARA Framework extraction** - Automatically categorize content into Projects, Areas, Resources, and Archives
+- 🔍 Extract tasks from your conversation automatically  
 - 🎙️ Voice input with transcription via Whisper API
-- 🔄 Integration with Notion for task management
+- 🔄 **Enhanced Notion integration** for PARA methodology and task management
+- ⚡ **Live sidebar** with confirmation system for extracted elements
 - 🔐 Authentication with Clerk
 
 ## Setup
@@ -26,8 +28,11 @@ A Next.js application that uses AI to help users chat, organize their thoughts, 
    # OpenAI API key for AI features
    OPENAI_API_KEY=sk_...
 
-   # Notion API (optional)
+   # Notion API (configure via Settings page in the app)
    NOTION_TOKEN=secret_...
+   
+   # Important: Notion configuration is done through the app's Settings page
+   # You don't need to set these in .env.local
    NOTION_DATABASE_ID=...
    ```
 
@@ -37,6 +42,43 @@ A Next.js application that uses AI to help users chat, organize their thoughts, 
    ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## PARA Framework Setup
+
+This app automatically extracts **PARA framework elements** from your conversations:
+- **Projects**: Specific outcomes with deadlines  
+- **Areas**: Ongoing responsibilities to maintain
+- **Resources**: Topics for future reference
+- **Archives**: Inactive items
+
+### Notion Database Setup
+
+To save PARA elements to Notion, create a database with these properties:
+
+**Required:**
+- `Name` (Title) - For element titles
+
+**Optional (for rich data):**
+- `Type` (Select) - PARA category options: PROJECT, AREA, RESOURCE, ARCHIVE
+- `Description` (Text) - Element descriptions  
+- `Priority` (Select) - Options: low, medium, high
+- `Due Date` (Date) - Deadline information
+- `Tags` (Multi-select) - Multiple tags per element
+- `Context` (Text) - Conversation context
+
+**Important Notes:**
+- The system auto-detects your database schema and adapts accordingly
+- Missing properties are gracefully skipped (won't cause errors)
+- If you don't have the optional properties, the system will still work with just the `Name` field
+- Property types matter: Use `Select` for Priority/Type, `Date` for Due Date, `Multi-select` for Tags
+
+### Configuration Steps
+
+1. **Go to Settings** in the app
+2. **Add your Notion Integration Token** (create at https://notion.so/integrations)
+3. **Add your Notion Database ID** (from database URL)
+4. **Start chatting** - PARA elements appear automatically in the sidebar
+5. **Click "Confirm"** to save elements to Notion
 
 ## How It Works
 

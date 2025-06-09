@@ -1,6 +1,6 @@
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { extractTasksFromChat } from '@/lib/ai';
+import { extractParaFromChat } from '@/lib/ai';
 
 export const config = {
   runtime: 'edge',
@@ -11,18 +11,18 @@ export default async function handler(req: Request) {
     return new Response('Method Not Allowed', { status: 405 });
   }
 
-  const { messages, extractTasks = false } = await req.json();
+  const { messages, extractPara = false } = await req.json();
 
-  // If extractTasks is true, we need to extract tasks from the messages
-  if (extractTasks) {
+  // If extractPara is true, extract PARA elements from the messages
+  if (extractPara) {
     try {
-      const taskData = await extractTasksFromChat(messages);
-      return new Response(JSON.stringify({ tasks: taskData.tasks }), {
+      const paraData = await extractParaFromChat(messages);
+      return new Response(JSON.stringify({ para: paraData }), {
         headers: { 'Content-Type': 'application/json' },
       });
     } catch (error) {
-      console.error('[CHAT TASK EXTRACTION ERROR]', error);
-      return new Response(JSON.stringify({ error: 'Failed to extract tasks' }), {
+      console.error('[CHAT PARA EXTRACTION ERROR]', error);
+      return new Response(JSON.stringify({ error: 'Failed to extract PARA elements' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
       });
